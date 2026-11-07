@@ -11,3 +11,4 @@ Versions follow [Semantic Versioning](https://semver.org/).
 - Repo scaffold: `uv` project, `pytest`, `ruff`, GitHub Actions CI.
 - `kitlist.sizing.next_standard_size`: smallest standard size covering load plus spare.
 - ADR 0001 (shared 24-column grid) and ADR 0002 (Python reference, Excel formulas at runtime).
+- Adjusted eq fields
