@@ -1,0 +1,23 @@
+# Runs on every push to main and every pull request.
+# A red X on a PR means: don't merge until it's fixed.
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+      - name: Install (exact versions from uv.lock)
+        run: uv sync --locked
+      - name: Lint
+        run: uv run ruff check .
+      - name: Formatting
+        run: uv run ruff format --check .
+      - name: Tests
+        run: uv run pytest

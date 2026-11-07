@@ -1,0 +1,25 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+build/
+dist/
+*.egg-info/
+
+# Tool caches
+.pytest_cache/
+.ruff_cache/
+
+# Build outputs (released through GitHub Releases, not committed)
+out/
+*.xlsx
+!tests/fixtures/*.xlsx
+
+# Excel / Office lock files
+~$*
+
+# Editors and OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db

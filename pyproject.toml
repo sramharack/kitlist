@@ -1,0 +1,31 @@
+[project]
+name = "kitlist"
+version = "0.0.1"
+description = "Aligned, macro-free Excel equipment schedules for MEP drawings, with built-in sizing and checks."
+readme = "README.md"
+license = "MIT"
+authors = [{ name = "Shankar Ramharack" }]
+requires-python = ">=3.11"
+dependencies = []
+
+[dependency-groups]
+dev = ["pytest>=8", "ruff>=0.6"]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/kitlist"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests", "src"]
+addopts = "--doctest-modules"
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+
+[tool.ruff.lint]
+# E/F: errors and pyflakes, I: import order, UP: modern syntax, B: likely bugs
+select = ["E", "F", "I", "UP", "B"]
