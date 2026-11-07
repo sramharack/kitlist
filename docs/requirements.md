@@ -39,3 +39,15 @@ it exists.
 - Load calculations. Demand is an input, calculated elsewhere.
 - DXF/PDF output, AutoCAD Data Link and native AutoCAD table objects. v0.1 gets schedules into drawings by copy-paste; the rest comes later.
 
+## Open questions
+
+These are engineering calls, not coding ones. Each is marked `DECIDE` in `layout.yaml`.
+
+| # | Question | Notes |
+|---|---|---|
+| Q1 | Dimensions in inches or mm? | Sample schedules use inches. Could be a profile default. |
+| Q2 | Is "provisional" shown on the schedule or in a general note? | Removed from the header because it didn't fit 3 columns. |
+| Q3 | Generator ratings in kW or kVA? | Demand served is in kVA on the sample sheet. |
+| Q4 | Where do generator enclosure and fuel type go? | This will be deffered to the specification document. |
+| Q5 | Is prime rating equal to standby rating acceptable? | No, this does vary on manufacturer such as CAT however, as these units prime is the same as standby
+| Q6 | How many data rows per table, and how are unused rows hidden? | Depends on the copy-paste trial: does a pasted table include hidden rows? |

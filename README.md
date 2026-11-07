@@ -70,8 +70,10 @@ each row is done in someone's head or a separate calc, and simple mistakes slip 
    the **Project** sheet.
 3. Add your equipment on each input sheet. Yellow cells are inputs; everything else is
    calculated.
-4. Read the **Schedules** sheet. It prints as-is, or link each schedule into AutoCAD with
-   `DATALINK` so the drawing updates when the workbook changes.
+4. Read the **Schedules** sheet. It prints as-is. To put a schedule on a drawing, select it
+   by name in the Name Box (e.g. `SCH_GENERATOR`), copy, and in AutoCAD use
+   **Paste Special > AutoCAD Entities**. Linked tables that update with the workbook are
+   planned after v0.1.
 
 ## How it works
 
@@ -93,12 +95,13 @@ recalculate the workbook and check that both give the same answer.
 | Milestone | Scope |
 |---|---|
 | M0 | Repo, tests and CI ✔ |
-| M1 | Requirements and `layout.yaml` |
-| M2 | Grid engine: field spans to merged cells |
+| M1 | Requirements and `layout.yaml` ✔ |
+| M2 | Grid engine: field spans to merged cells ✔ |
 | M3 | Selectors and equipment libraries for the five v0.1 types |
 | M4 | Workbook builder and build profiles |
 | M5 | Release automation and visual regression tests |
-| M6 | AutoCAD Data Link trial and pilot use → **v0.1.0** |
+| M6 | Copy-paste trial into AutoCAD and pilot use → **v0.1.0** |
+| Later | AutoCAD Data Link and native table objects |
 
 ## Development
 
