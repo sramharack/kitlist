@@ -27,12 +27,12 @@ def test_picks_smallest_size_that_covers_load_plus_spare(required, spare, expect
 
 
 def test_order_of_sizes_does_not_matter():
-    assert next_standard_size(50, reversed(XFMR_KVA)) == 75
+    assert next_standard_size(50, reversed(XFMR_KVA), spare=0.0) == 75
 
 
 def test_float_noise_does_not_bump_to_next_size():
     # 0.1 + 0.2 is 0.30000000000000004 in floating point
-    assert next_standard_size(0.1 + 0.2, [0.3, 0.5]) == 0.3
+        assert next_standard_size(0.1 + 0.2, [0.3, 0.5], spare=0.0) == 0.3
 
 
 def test_load_above_largest_size_is_an_error():

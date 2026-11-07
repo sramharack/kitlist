@@ -17,7 +17,7 @@ from collections.abc import Iterable
 REL_TOL = 1e-9
 
 
-def next_standard_size(required: float, sizes: Iterable[float], spare: float = 0.0) -> float:
+def next_standard_size(required: float, sizes: Iterable[float], spare: float) -> float:
     """Return the smallest standard size that covers ``required * (1 + spare)``.
 
     Args:

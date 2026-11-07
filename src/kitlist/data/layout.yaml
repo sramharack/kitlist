@@ -1,0 +1,93 @@
+# kitlist layout: the one place that defines how every schedule looks.
+# The grid engine (kitlist/grid.py) reads this file and validates it.
+# Design rationale: docs/decisions/0001-shared-24-column-grid.md
+#
+# Spans are in grid columns. Within each table:
+#   tag + description + qty + ratings + dimensions + notes = 24
+# Ratings get 12 columns, or 15 when the type has no dimensions.
+# Lines marked "DECIDE" are open engineering questions (docs/requirements.md).
+
+grid:
+  columns: 24
+  column_width: 6.0      # Excel width units (about one character each); 1-column labels need ~6
+  font: Arial
+  font_size: 8
+  blank_rows: 3          # empty rows shown per table in the preview
+
+blocks:                  # fixed blocks: same position in every table
+  tag:         {span: 2, label: TAG NO.}
+  description: {span: 4, label: DESCRIPTION}
+  qty:         {span: 1, label: QTY}
+  ratings:     {span: 12, label: ELECTRICAL RATINGS}
+  dimensions:  {span: 3, label: DIMENSIONS, unit: in}   
+  notes:       {span: 2, label: NOTES}
+
+types:
+  transformer:
+    title: TRANSFORMERS
+    dimensions: true
+    ratings:
+      - {key: kva,       label: RATING,            unit: kVA, span: 2}
+      - {key: v_pri,     label: PRIMARY VOLTAGE,   unit: V,   span: 2}
+      - {key: v_sec,     label: SECONDARY VOLTAGE, unit: V,   span: 2}
+      - {key: phase,     label: PHASE,             unit: Ø,   span: 2}
+      - {key: freq,      label: FREQ.,             unit: Hz,  span: 2}
+      - {key: type,      label: TYPE / COOLING,               span: 2}   # e.g. "Dry, AN"
+
+  buck_boost:
+    title: BUCK-BOOST TRANSFORMERS
+    dimensions: true
+    ratings:
+      - {key: kva,       label: RATING,            unit: kVA, span: 2}
+      - {key: v_in,      label: INPUT VOLTAGE,     unit: V,   span: 2}
+      - {key: v_out,     label: OUTPUT VOLTAGE,    unit: V,   span: 2}
+      - {key: phase,     label: PHASE,             unit: Ø,   span: 2}
+      - {key: mode,      label: BUCK / BOOST,                 span: 2}
+      - {key: freq,      label: FREQ.,             unit: Hz,  span: 2}
+
+  generator:
+    title: GENERATORS
+    dimensions: true
+    ratings:
+      - {key: demand,    label: DEMAND SERVED,     unit: kVA, span: 2}
+      - {key: standby,   label: STANDBY RATING,    unit: kW,  span: 2}   # Presenting both demand served and standby rating is a bit redundant, but it is common practice in generator specs.
+      - {key: prime,     label: PRIME RATING,      unit: kW,  span: 2}
+      - {key: voltage,   label: NOM. VOLTAGE,      unit: V,   span: 2}
+      - {key: phase,     label: PHASE,             unit: Ø,   span: 1}
+      - {key: freq,      label: FREQ.,             unit: Hz,  span: 1}
+      - {key: runtime,   label: FUEL RUN TIME,     unit: h,   span: 2}
+    # Tender spec normally has enclosure and fuel type in the description, but it is not a rating.
+
+  ats:
+    title: AUTOMATIC TRANSFER SWITCHES
+    dimensions: true
+    ratings:
+      - {key: voltage,   label: NOM. VOLTAGE,      unit: V,   span: 2}
+      - {key: phase,     label: PHASE,             unit: Ø,   span: 1}
+      - {key: poles,     label: POLES,                        span: 1}
+      - {key: current,   label: NOM. CURRENT,      unit: A,   span: 2}
+      - {key: transition, label: TRANSITION,                  span: 2}   # open / closed / delayed
+      - {key: enclosure, label: ENCLOSURE,                    span: 2}
+      - {key: freq,      label: FREQ.,             unit: Hz,  span: 2}
+
+  disconnect:
+    title: DISCONNECT SWITCHES
+    dimensions: true
+    ratings:
+      - {key: voltage,   label: NOM. VOLTAGE,      unit: V,   span: 2}
+      - {key: phase,     label: PHASE,             unit: Ø,   span: 1}
+      - {key: rating,    label: SWITCH RATING,     unit: A,   span: 2}
+      - {key: fuse,      label: FUSE,              unit: A,   span: 2}   # blank = not fused
+      - {key: duty,      label: DUTY,                         span: 2}
+      - {key: enclosure, label: ENCLOSURE,                    span: 2}
+      - {key: freq,      label: FREQ.,             unit: Hz,  span: 1}
+
+  spd:
+    title: SURGE PROTECTION DEVICES
+    dimensions: false    # no dimensions: ratings get 15 columns
+    ratings:
+      - {key: type,      label: SPD TYPE,                     span: 3}
+      - {key: voltage,   label: NOM. VOLTAGE,      unit: V,   span: 3}
+      - {key: mcov,      label: MCOV,              unit: V,   span: 3}
+      - {key: in_ka,     label: NOM. DISCHARGE CURRENT, unit: kA, span: 3}
+      - {key: surge,     label: SURGE CAPACITY,    unit: kA/phase, span: 3}
