@@ -105,3 +105,25 @@ def test_blocks_that_do_not_add_up_to_the_grid_are_rejected(raw, tmp_path):
 def test_unknown_equipment_type_is_rejected():
     with pytest.raises(LayoutError, match="unknown equipment type 'ups'"):
         LAYOUT.table("ups")
+
+
+# ---- engineering decisions, pinned so they can't change by accident ----
+# (docs/requirements.md, "Decisions")
+
+
+def units(spec):
+    return {f.key: f.unit for f in spec.fields}
+
+
+def test_d1_dimensions_are_in_inches():
+    assert units(LAYOUT.table("transformer"))["dim_width"] == "in"
+
+
+def test_d2_dimensions_are_labelled_provisional():
+    labels = [h.text for h in LAYOUT.table("generator").header if h.row == 1]
+    assert "PROVISIONAL DIMENSIONS" in labels
+
+
+def test_d3_generator_ratings_share_a_unit_with_demand():
+    u = units(LAYOUT.table("generator"))
+    assert u["demand"] == u["standby"] == u["prime"] == "kVA"
