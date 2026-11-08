@@ -8,7 +8,7 @@
 <p align="center"><b>Aligned, macro-free equipment schedules for MEP drawings, with built-in sizing and checks.</b></p>
 
 <p align="center">
-  <a href="https://github.com/sramharack/kitlist/actions/workflows/ci.yml"><img alt="CI" src="https://github.com/sramharack/kitlist/actions/workflows/ci.yml/badge.svg"></a>
+  <a href="https://github.com/OWNER/kitlist/actions/workflows/ci.yml"><img alt="CI" src="https://github.com/OWNER/kitlist/actions/workflows/ci.yml/badge.svg"></a>
   <a href="LICENSE"><img alt="License: MIT" src="https://img.shields.io/badge/license-MIT-1F3A5F"></a>
 </p>
 

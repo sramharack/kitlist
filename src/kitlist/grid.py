@@ -66,7 +66,7 @@ class Layout:
     column_width: float
     font: str
     font_size: float
-    blank_rows: int
+    start_rows: int
     blocks: dict
     types: dict
 
@@ -90,7 +90,7 @@ def load_layout(path: Path | None = None) -> Layout:
         column_width=float(grid["column_width"]),
         font=grid["font"],
         font_size=float(grid["font_size"]),
-        blank_rows=int(grid.get("blank_rows", 3)),
+        start_rows=int(grid.get("start_rows", 3)),
         blocks=raw["blocks"],
         types=raw["types"],
     )

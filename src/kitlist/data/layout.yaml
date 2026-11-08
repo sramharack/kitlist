@@ -1,25 +1,25 @@
 # kitlist layout: the one place that defines how every schedule looks.
 # The grid engine (kitlist/grid.py) reads this file and validates it.
-# Design rationale: docs/decisions/0001-shared-24-column-grid.md
+# Design rationale: docs/decisions/0001 (grid) and 0004 (one sheet per type).
 #
 # Spans are in grid columns. Within each table:
 #   tag + description + qty + ratings + dimensions + notes = 24
 # Ratings get 12 columns, or 15 when the type has no dimensions.
-# Lines marked "DECIDE" are open engineering questions (docs/requirements.md).
+# Engineering decisions behind these fields: docs/requirements.md, "Decisions".
 
 grid:
   columns: 24
   column_width: 6.0      # Excel width units (about one character each); 1-column labels need ~6
   font: Arial
   font_size: 8
-  blank_rows: 3          # empty rows shown per table in the preview
+  start_rows: 3          # rows each schedule starts with; users add or delete rows in Excel (ADR 0004)
 
 blocks:                  # fixed blocks: same position in every table
   tag:         {span: 2, label: TAG NO.}
   description: {span: 4, label: DESCRIPTION}
   qty:         {span: 1, label: QTY}
   ratings:     {span: 12, label: ELECTRICAL RATINGS}
-  dimensions:  {span: 3, label: DIMENSIONS, unit: in}   
+  dimensions:  {span: 3, label: PROVISIONAL DIMENSIONS, unit: in}   # D1, D2
   notes:       {span: 2, label: NOTES}
 
 types:
@@ -50,8 +50,8 @@ types:
     dimensions: true
     ratings:
       - {key: demand,    label: DEMAND SERVED,     unit: kVA, span: 2}
-      - {key: standby,   label: STANDBY RATING,    unit: kW,  span: 2}   # Presenting both demand served and standby rating is a bit redundant, but it is common practice in generator specs.
-      - {key: prime,     label: PRIME RATING,      unit: kW,  span: 2}
+      - {key: standby,   label: STANDBY RATING,    unit: kVA, span: 2}   # Presenting both demand served and standby rating is a bit redundant, but it is common practice in generator specs.
+      - {key: prime,     label: PRIME RATING,      unit: kVA, span: 2}   # D3: kVA, same as demand
       - {key: voltage,   label: NOM. VOLTAGE,      unit: V,   span: 2}
       - {key: phase,     label: PHASE,             unit: Ø,   span: 1}
       - {key: freq,      label: FREQ.,             unit: Hz,  span: 1}

@@ -1,6 +1,6 @@
 # 0001: All schedules share one 24-column grid
 
-- **Status:** accepted
+- **Status:** accepted; amended by [0004](0004-one-sheet-per-equipment-type.md) (tables now on separate sheets)
 - **Date:** 2026-11-07
 
 ## Context
