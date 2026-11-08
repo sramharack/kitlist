@@ -32,12 +32,14 @@ it exists.
 | NFR-02 | The workbook is self-contained: no links to other files. |
 | NFR-03 | Every engineering rule has Python tests, and an automated test checks the Excel formula agrees with Python (ADR 0002). |
 | NFR-04 | A schedule shows what a drawing needs: at most about 7 ratings per type. Detail belongs in the specification. |
+| NFR-05 | Every value in an equipment library cites a source listed in `docs/design-basis.md`. A test fails if a source is missing or unlisted. |
 
 ## Non-goals (v0.1)
 
 - Writing specifications.
 - A manufacturer product database. Libraries hold standard sizes and typical dimensions only.
 - Load calculations. Demand is an input, calculated elsewhere.
+- Certifying compliance with standards. Library sizes come from the cited standards; whether a product complies is confirmed by the manufacturer's data.
 - DXF/PDF output, AutoCAD Data Link and native AutoCAD table objects. v0.1 gets schedules into drawings by copy-paste; the rest comes later.
 
 ## Decisions
