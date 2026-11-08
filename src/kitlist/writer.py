@@ -1,7 +1,10 @@
 """Write schedules to Excel from the grid engine's TableSpecs.
 
-For now this draws headers and blank rows only: a preview to check alignment
-and to trial pasting into AutoCAD (M2 spike). Inputs, formulas and checks come in M4.
+Each equipment type gets its own sheet (ADR 0004). Every sheet uses the same
+column widths, so the tables still line up when pasted into a drawing.
+
+For now this draws headers and starter rows only: a preview to check alignment
+and to trial pasting into AutoCAD. Inputs, formulas and checks come in M4.
 """
 
 from pathlib import Path
@@ -17,41 +20,47 @@ THIN = Side(style="thin", color="000000")
 BOX = Border(left=THIN, right=THIN, top=THIN, bottom=THIN)
 CENTRE = Alignment(horizontal="center", vertical="center", wrap_text=True)
 LEFT = Alignment(horizontal="left", vertical="center", wrap_text=True)
-ROW_HEIGHTS = (14, 12, 24, 11)  # title, group, field label, unit (points)
+# Points per header row: title, group (two lines, for "PROVISIONAL DIMENSIONS"),
+# field label (two lines), unit.
+ROW_HEIGHTS = (14, 22, 24, 11)
 DATA_ROW_HEIGHT = 12.75
 LEFT_ALIGNED = {"description", "notes"}
+_BAD_SHEET_CHARS = str.maketrans({c: " " for c in "[]:*?/\\"})
 
 
 def range_name(spec: TableSpec) -> str:
-    """Excel name for a table's range, e.g. SCH_TRANSFORMER (select via the Name Box to copy;
-    a future AutoCAD Data Link can target the same name)."""
+    """Excel name for a table's range, e.g. SCH_TRANSFORMER. Select it in the Name Box
+    to copy the whole table; a future AutoCAD Data Link can target the same name."""
     return f"SCH_{spec.key.upper()}"
 
 
+def sheet_name(spec: TableSpec) -> str:
+    """Sheet tab name from the table title, e.g. 'Automatic Transfer Switches'.
+    Excel allows at most 31 characters and none of [ ] : * ? / \\ ."""
+    return spec.title.title().translate(_BAD_SHEET_CHARS).strip()[:31]
+
+
 def write_preview(layout: Layout, path: Path) -> Path:
-    """Write every schedule, stacked on one 'Schedules' sheet, to an .xlsx file."""
+    """Write every schedule, one sheet per equipment type, to an .xlsx file."""
     wb = Workbook()
-    ws = wb.active
-    ws.title = "Schedules"
-    ws.sheet_view.showGridLines = False
+    wb.remove(wb.active)  # start with no sheets; we add one per type
 
-    for c in range(1, layout.columns + 1):
-        ws.column_dimensions[get_column_letter(c)].width = layout.column_width
-
-    row = 1
     for spec in layout.tables():
-        last = _write_table(ws, layout, spec, row)
-        first_ref = f"$A${row}"
-        last_ref = f"${get_column_letter(layout.columns)}${last}"
-        wb.defined_names[range_name(spec)] = DefinedName(
-            range_name(spec), attr_text=f"Schedules!{first_ref}:{last_ref}"
-        )
-        row = last + 2  # one empty row between tables
+        ws = wb.create_sheet(sheet_name(spec))
+        ws.sheet_view.showGridLines = False
+        for c in range(1, layout.columns + 1):
+            ws.column_dimensions[get_column_letter(c)].width = layout.column_width
 
-    ws.print_area = f"A1:{get_column_letter(layout.columns)}{row - 2}"
-    ws.page_setup.orientation = "landscape"
-    ws.page_setup.fitToWidth, ws.page_setup.fitToHeight = 1, 0
-    ws.sheet_properties.pageSetUpPr.fitToPage = True
+        last_row = _write_table(ws, layout, spec, top=1)
+        last_col = get_column_letter(layout.columns)
+        wb.defined_names[range_name(spec)] = DefinedName(
+            range_name(spec), attr_text=f"'{ws.title}'!$A$1:${last_col}${last_row}"
+        )
+
+        ws.print_area = f"A1:{last_col}{last_row}"
+        ws.page_setup.orientation = "landscape"
+        ws.page_setup.fitToWidth, ws.page_setup.fitToHeight = 1, 0
+        ws.sheet_properties.pageSetUpPr.fitToPage = True
 
     path = Path(path)
     wb.save(path)
@@ -60,7 +69,7 @@ def write_preview(layout: Layout, path: Path) -> Path:
 
 def _write_table(ws, layout: Layout, spec: TableSpec, top: int) -> int:
     """Draw one table with its top-left at row `top`. Returns its last row."""
-    n_rows = HEADER_ROWS + layout.blank_rows
+    n_rows = HEADER_ROWS + layout.start_rows
     font = Font(name=layout.font, size=layout.font_size)
     bold = Font(name=layout.font, size=layout.font_size, bold=True)
 
